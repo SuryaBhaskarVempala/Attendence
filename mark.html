@@ -389,7 +389,7 @@
         });
 
    
-    setInterval( hideAttendanceButtons, 1000);
+    setInterval(hideAttendanceButtons, 1000);
 
     function hideAttendanceButtons() {
         let date=new Date();
@@ -397,13 +397,13 @@
         const minutes = date.getMinutes();
 
         // Hide Morning Attendance button after 11:30 AM
-        const morningButton = document.querySelector('.attendance-box:nth-child(1) button');
+        const morningButton = document.querySelector('.button1');
         if (hours > 11 || (hours === 11 && minutes > 30)) {
             morningButton.style.display = 'none';
         }
 
         // Hide Afternoon Attendance button after 4:30 PM
-        const afternoonButton = document.querySelector('.attendance-box:nth-child(2) button');
+        const afternoonButton = document.querySelector('.button2');
         if (hours > 16 || (hours === 16 && minutes > 30)) {
             afternoonButton.style.display = 'none';
         }
