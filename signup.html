@@ -306,7 +306,7 @@ button.login-btn:hover {
             regx(idValue);
 
             function regx(val) {
-                let reg = /^MSS2[45]\d{4}$/;
+                let reg = /^MS[ST][0-2][0-5]\d{4}$/;
                 isId = reg.test(val);
                 if (isId) {
                     id.classList.remove('error');
