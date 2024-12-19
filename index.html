@@ -23,6 +23,9 @@
             justify-content: center;
             align-items: center;
             height: 100%;
+            width: 100%;
+            position: relative;
+            z-index: 1; /* Ensure it stays above the heading */
         }
 
         .login-box {
@@ -114,10 +117,49 @@
             left: 10px;
             width: 100px;  /* Adjust the width as needed */
         }
+
+        /* New CSS for the "Attendance Portal" heading with alternating colors */
+        .attendance-heading {
+            font-size: 36px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: absolute; /* Position it outside the container */
+            top: 20px; /* Adjust positioning from top */
+            left: 50%; /* Center it horizontally */
+            transform: translateX(-50%); /* Fine-tune centering */
+        }
+
+        .attendance-heading span {
+            display: inline-block;
+            color: #007BFF;
+            animation: color-change 1s infinite alternate;
+        }
+
+        .attendance-heading span:nth-child(odd) {
+            color: #5f31c4;
+        }
+
+        .attendance-heading span:nth-child(even) {
+            color: #FF6347;
+        }
+
+        @keyframes color-change {
+            0% { color: #FF6347; }
+            100% { color: #5f31c4; }
+        }
+
     </style>
 </head>
 <body>
     
+    <!-- Attendance Portal Heading outside the container -->
+    <div class="attendance-heading">
+        <span>A</span><span>t</span><span>t</span><span>e</span><span>n</span><span>d</span><span>a</span><span>n</span><span>c</span><span>e</span> 
+        <span>P</span><span>o</span><span>r</span><span>t</span><span>a</span><span>l</span>
+    </div>
+
     <div class="login-container">
         <div class="login-box">
             <div class="logo">
@@ -139,51 +181,48 @@
                 <div class="links">
                     <a href="signup.html">Sign Up</a> | <a href="forgotPassword.html">Forgot Password?</a>
                 </div>
-                </div>
-               
-               
-        <script>
-           
-            let form = document.querySelector("form");
-            let userId=document.querySelector(".username");
-            let password=document.querySelector(".password");
-           
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); 
-                jsonObject={
-                    "username":`${userId.value.trim()}`,
-                    "password":`${password.value.trim()}`
-                }
-                stringObj = JSON.stringify(jsonObject); 
-                console.log(stringObj);
-                fetch('https://attendence-deployment.onrender.com/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: stringObj
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.msg);
-                    if (data.msg == 'sucess') {
-                        sessionStorage.setItem("id",userId.value.trim());
-                        window.location.href="mark.html";
-                    } 
-                    if(data.msg == 'error'){
-                        alert('InCorrect Credentials');
-                        window.location.href="index.html";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error processing your request.Please Try After Some Time !');
-                    window.location.href="index.html";
-                });
-            });
+            </div>
+        </div>
+    </div>
 
-        </script>
-                
+    <script>
+        let form = document.querySelector("form");
+        let userId=document.querySelector(".username");
+        let password=document.querySelector(".password");
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            jsonObject={ 
+                "username":`${userId.value.trim()}`,
+                "password":`${password.value.trim()}`
+            }
+            stringObj = JSON.stringify(jsonObject); 
+            console.log(stringObj);
+            fetch('https://attendence-deployment.onrender.com/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: stringObj
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.msg);
+                if (data.msg == 'sucess') {
+                    sessionStorage.setItem("id",userId.value.trim());
+                    window.location.href="mark.html";
+                } 
+                if(data.msg == 'error'){
+                    alert('InCorrect Credentials');
+                    window.location.href="index.html";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error processing your request.Please Try After Some Time !');
+                window.location.href="index.html";
+            });
+        });
     </script>
 </body>
 </html>
