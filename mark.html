@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f7fc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            text-align: center;
+            padding-top: 20px;
+            transition: background-color 0.5s;
+        }
+
+        header {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(to right, #3498db, #8e44ad);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            animation: headerAnimation 1s ease-out;
+            width: 100%;
+        }
+
+        @keyframes headerAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .current-time {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+        }
+
+        .status-message {
+            display: none;
+            font-size: 16px;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 1s ease-in-out, transform 0.5s ease;
+        }
+
+        .status-message.success {
+            color: green;
+        }
+
+        .status-message.error {
+            color: red;
+        }
+
+        #map-container {
+            display: none;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 2s ease-out;
+        }
+
+        iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            position: relative;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .attendance-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .attendance-box {
+            width: 100%;
+        }
+
+        .additional-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>MSSQUARE TECHNOLOGIES</header>
+
+    <div class="current-time" id="current-time"></div>
+
+    <div class="attendance-section">
+        <!-- Morning Attendance -->
+        <div class="attendance-box">
+            <div class="box">
+                <h3>Morning Attendance</h3>
+                <div class="status-message success" id="morning-status-success">Attendance Marked!</div>
+                <div class="status-message error" id="morning-status-error">Attendance Not Marked</div>
+                <button onclick="locateAndMarkAttendance('morning-status-success', 'morning-status-error', 'morning')" class="button1" id="btn1">
+                    Mark Morning Attendance
+                    <div class="loading-spinner" id="morning-spinner"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Afternoon Attendance -->
+        <div class="attendance-box">
+            <div class="box">
+                <h3>Afternoon Attendance</h3>
+                <div class="status-message success" id="afternoon-status-success">Attendance Marked!</div>
+                <div class="status-message error" id="afternoon-status-error">Attendance Not Marked</div>
+                <button  onclick="locateAndMarkAttendance('afternoon-status-success', 'afternoon-status-error', 'afternoon')" class="button2">
+                    Mark Afternoon Attendance
+                    <div class="loading-spinner" id="afternoon-spinner"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="map-container">
+        <h3>Your Location</h3>
+        <iframe id="map-iframe" src=""></iframe>
+    </div>
+
+    <div class="additional-buttons">
+        <button onclick="window.location.href='mailto:contact@mssquare.com';">Contact Us</button>
+        <button onclick="window.location.href='index.html';">Sign Out</button>
+    </div>
+
+    <script>
+        if(sessionStorage.length == 0){
+            window.location.href="index.html";
+        }
+        
+        var forFirstButton="error";
+        var forSecondButton="error";
+
+        const btn1=document.querySelector(".button1");
+        const btn2=document.querySelector(".button2");
+        const minLatitude = 13.000000001;
+        const maxLatitude = 27.000000001;
+        const minLongitude = 80.000000001;
+        const maxLongitude = 89.0000000001;
+        const maxDistance = 0.1; // Maximum distance in kilometers
+    
+        function updateDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+            document.getElementById('current-time').textContent = `Date: ${date} | Time: ${time}`;
+        }
+        setInterval(updateDateTime, 1000);
+    
+        function isWithinAllowedTimeRange() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+    
+           // Allowed time ranges: 10:30 AM to 11:10 AM and 2:00 PM to 4:30 PM 
+           const isMorningSlot = (hours === 10 && minutes >= 30) || (hours === 11 && minutes <= 10); 
+           const isAfternoonSlot = (hours === 14 && minutes >= 0) || (hours === 14 && minutes <= 40) || (hours > 14 && hours < 16) || (hours === 16 && minutes <= 30);
+
+    
+            return isMorningSlot || isAfternoonSlot;
+        }
+    
+        function locateAndMarkAttendance(successId, errorId, timeOfDay,event) {
+            // Check if the current time is within the allowed time range
+            if (!isWithinAllowedTimeRange()) {
+                const errorMessage = document.getElementById(errorId);
+                errorMessage.textContent = "Attendance can only be marked between 10:30–11:10 AM and 2:00–2:40 PM.";
+                errorMessage.style.display = "block";
+                errorMessage.style.opacity = 1; // Trigger fade-in animation
+                errorMessage.style.transform = "translateY(0)";
+                return;
+            }
+
+            // Show the spinner
+            const spinner = document.getElementById(timeOfDay + '-spinner');
+            spinner.style.display = 'block';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const { latitude, longitude } = position.coords;
+
+                    // Show Google Maps in an iframe
+                    const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&output=embed`;
+                    const mapContainer = document.getElementById('map-container');
+                    const mapIframe = document.getElementById('map-iframe');
+
+                    mapIframe.src = mapUrl;
+                    mapContainer.style.display = 'block';
+                    mapContainer.style.opacity = 1; // Trigger fade-in animation
+
+                    // Automatically mark attendance after a delay (to simulate location confirmation)
+                    setTimeout(() => {
+                        mapContainer.style.display = 'none'; // Hide map after marking attendance
+                        markAttendance(latitude, longitude, successId, errorId, timeOfDay,event);
+                    }, 5000); // 5 seconds delay for user to check location
+                }, () => {
+                    console.error('Geolocation is not available');
+                    alert('Geolocation is not supported by this browser.');
+                    spinner.style.display = 'none';
+                }, { enableHighAccuracy: true });
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+                alert('Geolocation is not supported by this browser.');
+                spinner.style.display = 'none';
+            }
+        }
+    
+        function markAttendance(latitude, longitude, successId, errorId, timeOfDay,event) {
+            const successMessage = document.getElementById(successId);
+            const errorMessage = document.getElementById(errorId);
+
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+
+            // Check if the user's location is within the allowed boundaries
+            if (
+                latitude >= minLatitude && latitude <= maxLatitude &&
+                longitude >= minLongitude && longitude <= maxLongitude
+            ) {
+                successMessage.style.display = "block";
+                successMessage.style.opacity = 1; // Trigger fade-in animation
+                successMessage.style.transform = "translateY(0)";
+                errorMessage.style.display = "none";
+
+                
+                const id=sessionStorage.getItem('id').toString();
+
+                fetch('https://attendence-deployment.onrender.com/saveExcel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                       eid:id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.msg == 'sucess') {
+                        forFirstButton="sucess";
+                        alert("Attendece Marked")
+                    } 
+                    if(data.msg == 'error'){
+                        alert('Attendence Not Marked Please Go To Office');
+                        forFirstButton="error";
+                        window.location.href="mark.html";
+                    }
+                })
+                .catch(error => console.error('Error marking attendance:', error));
+
+
+                // Automatically hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = "none";
+                    document.getElementById(timeOfDay + '-spinner').style.display = 'none'; // Hide spinner
+                    window.location.href = 'index.html';  // Redirect to login page after attendance marked
+                }, 5000); // 5 seconds delay
+
+                // Send data to the backend
+                fetch('/mark-attendance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        date: currentDate,
+                        latitude,
+                        longitude,
+                        status: 'present',
+                        timeOfDay: timeOfDay
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log('Attendance marked successfully:', data))
+                .catch(error => console.error('Error marking attendance:', error));
+            } else {
+                successMessage.style.display = "none";
+                errorMessage.style.display = "block";
+                errorMessage.style.opacity = 1; // Trigger fade-in animation
+                errorMessage.style.transform = "translateY(0)";
+
+                // Automatically hide error message after 5 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = "none";
+                    document.getElementById(timeOfDay + '-spinner').style.display = 'none'; // Hide spinner
+                    window.location.href = 'index.html';  // Redirect to login page after failure
+                }, 5000); // 5 seconds delay
+            }
+        }
+
+        // Redirect to index.html when the page is refreshed or unloaded
+        window.addEventListener('beforeunload', function () {
+            window.location.href = 'index.html';
+        });
+
+   
+    setInterval(hideAttendanceButtons, 2000);
+
+    function hideAttendanceButtons() {
+    let date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+
+    // Hide Morning Attendance button after 11:30 AM
+    const morningButton = document.querySelector('#btn1');
+    if (hours > 12 || hours < 11){
+        morningButton.style.display = 'none';
+    } else {
+        morningButton.style.display = 'block';
+    }
+
+    // Hide Afternoon Attendance button after 4:30 PM
+    const afternoonButton = document.querySelector('.button2');
+    if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
+        afternoonButton.style.display = 'none';
+    } 
+    else{
+        afternoonButton.style.display = 'inline-block';
+    }
+}
+
+    </script>
+</body>
+</html>

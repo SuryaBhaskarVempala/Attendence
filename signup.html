@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Ms Square Technologies</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #75a2d2, #00C6FF);
+    position: relative;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 34px;
+    font-weight: bold;
+    color: #222223;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif; /* New font applied */
+}
+
+.logo img {
+    width: 100px; /* Adjust the size of the logo */
+    height: 125px; /* Ensure the logo maintains its aspect ratio */
+    margin-right: -30px; /* Add space between logo and text */
+}
+
+h2 {
+    margin: 20px 0;
+    font-size: 24px;
+    color: #5f31c4;
+}
+
+.input-container {
+    margin: 15px 0;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+button.login-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button.login-btn:hover {
+    background-color: #0056b3;
+}
+
+.links {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.links a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.form-container {
+    display: none;
+}
+
+.form-container.active {
+    display: block;
+}
+
+/* Left-top logo positioning */
+.top-left-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px; /* Adjust the width as needed */
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #75a2d2, #00C6FF);
+    position: relative;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 34px;
+    font-weight: bold;
+    color: #222223;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif; /* New font applied */
+}
+
+.logo img {
+    width: 100px; /* Adjust the size of the logo */
+    height: 125px; /* Ensure the logo maintains its aspect ratio */
+    margin-right: -30px; /* Add space between logo and text */
+}
+
+h2 {
+    margin: 20px 0;
+    font-size: 24px;
+    color: #5f31c4;
+}
+
+.input-container {
+    margin: 15px 0;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+}
+
+button.login-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button.login-btn:hover {
+    background-color: #0056b3;
+}
+
+.links {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.links a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.form-container {
+    display: none;
+}
+
+.form-container.active {
+    display: block;
+}
+
+/* Left-top logo positioning */
+.top-left-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px; /* Adjust the width as needed */
+}
+
+.error{
+    border: 2px solid red;
+}
+.active{
+    border: 2px solid green;
+}
+    </style>
+    <style>
+        .error {
+            border-color: red;
+        }
+        .active {
+            border-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <img src="img/mslogo__1_-removebg-preview.png" alt="Logo">
+                Ms Square Technologies
+            </div>
+            <h2>SIGN UP</h2>
+            <form id="signupForm" action="index.html" method="POST">
+                <div class="input-container">
+                    <input type="text" placeholder="Full Name" name="full_name" class="name" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="ID" name="id" class="id" required>
+                </div>
+                <div class="input-container">
+                    <input type="text" placeholder="Mobile Number" name="mobile_number" class="mobile_num" required>
+                </div>
+                <div class="input-container">
+                    <input type="email" placeholder="Email" name="email" class="email" required>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Password" name="password" class="password" required>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Confirm Password" name="confirm_password" class="confirm-password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign Up</button>
+            </form>
+            <div class="links">
+                <a href="index.html">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.querySelector("form");
+        const nameInput = document.querySelector(".name");
+        const id = document.querySelector(".id");
+        const mobile_num = document.querySelector(".mobile_num");
+        const email = document.querySelector(".email");
+        const password = document.querySelector(".password");
+        const confirm_password = document.querySelector(".confirm-password");
+
+        let isName = false, isId = false, isMobileNum = false, isEmail = false, isPassword = false, isConfirmPassword = false;
+
+
+        // Name validation
+        nameInput.addEventListener('keyup', function() {
+            let nameValue = nameInput.value.trim();
+
+            if (nameValue.length > 6) {
+                nameInput.classList.remove('error');
+                nameInput.classList.add('active');
+                isName = true;
+            } else {
+                nameInput.classList.add('error');
+                nameInput.classList.remove('active');
+                isName = false;
+            }
+        });
+
+        // ID validation
+        id.addEventListener('keyup', function() {
+            let idValue = id.value.trim();
+            regx(idValue);
+
+            function regx(val) {
+                let reg = /^MS[ST][0-2][0-5]\d{4}$/;
+                isId = reg.test(val);
+                if (isId) {
+                    id.classList.remove('error');
+                    id.classList.add('active');
+                    isId = true;
+                } else {
+                    id.classList.remove('active');
+                    id.classList.add('error');
+                    isId = false;
+                }
+            }
+        });
+        
+        // Mobile number validation
+        mobile_num.addEventListener('keyup', function() {
+            regx(mobile_num.value.trim());
+
+            function regx(val) {
+                let reg = /^[6-9]\d{9}$/;
+                isMobileNum = reg.test(val);
+                if (isMobileNum) {
+                    mobile_num.classList.remove('error');
+                    mobile_num.classList.add('active');
+                    isMobileNum = true;
+                } else {
+                    mobile_num.classList.add('error');
+                    mobile_num.classList.remove('active');
+                    isMobileNum = false;
+                }
+            }
+        });
+
+        // Email validation
+        email.addEventListener('keyup', function() {
+            regx(email.value.trim());
+
+            function regx(val) {
+                let reg = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                isEmail = reg.test(val);
+                if (isEmail) {
+                    email.classList.remove('error');
+                    email.classList.add('active');
+                    isEmail = true;
+                } else {
+                    email.classList.add('error');
+                    email.classList.remove('active');
+                    isEmail = false;
+                }
+            }
+        });
+
+        // Password validation
+        password.addEventListener('keyup', function() { 
+            let passwordValue = password.value.trim(); 
+
+            if (passwordValue.length > 8) { 
+                password.classList.remove('error'); 
+                password.classList.add('active'); 
+                isPassword = true; 
+            } else { 
+                password.classList.add('error'); 
+                password.classList.remove('active'); 
+                isPassword = false; 
+            } 
+        });
+
+        // Confirm password validation
+        confirm_password.addEventListener('keyup', function() {
+            if (confirm_password.value === password.value.trim()) {
+                confirm_password.classList.remove('error'); 
+                confirm_password.classList.add('active'); 
+                isConfirmPassword = true; 
+            } else {
+                confirm_password.classList.remove('active');
+                confirm_password.classList.add('error');
+                isConfirmPassword = false;
+            }
+        });
+
+        //sending data to Spring boot api:
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (isName && isId && isMobileNum && isEmail && isPassword && isConfirmPassword) {
+                const jsonObject={
+                    "name":`${nameInput.value.trim()}`,
+                    "eid":`${id.value.trim()}`,
+                    "mobile":`${mobile_num.value.trim()}`,
+                    "email":`${email.value.trim()}`,
+                    "password":`${password.value.trim()}`
+                }
+                stringObj = JSON.stringify(jsonObject); 
+                console.log(stringObj);
+                fetch('https://attendence-deployment.onrender.com/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: stringObj
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.msg === 'sucess') {
+                        alert('Signup successful');
+                        window.location.href="index.html";
+                    } 
+                    if(data.msg === 'idTaken'){
+                        alert('ID Already Taken Please Go To Login !');
+                        window.location.href="signup.html";
+                    }
+                    if(data.msg === 'emailTaken'){
+                        alert('Email Already Taken');
+                        window.location.href="signup.html";
+                    }
+                    if(data.msg == 'error'){
+                        alert('Signup failed');
+                        window.location.href="signup.html";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error processing your request.Please Try After Some Time !');
+                });
+            } else {
+                alert("Please Enter Valid Credentials !");
+            }
+        });
+    </script>
+</body>
+</html>
