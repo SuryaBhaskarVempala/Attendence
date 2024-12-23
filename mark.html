@@ -184,6 +184,17 @@
         }
 
     </style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSSQUARE TECHNOLOGIES</title>
+    <style>
+        /* Your CSS here for styles */
+        /* Add any specific styling you need */
+    </style>
 </head>
 <body>
     <header>MSSQUARE TECHNOLOGIES</header>
@@ -232,12 +243,7 @@
         if(sessionStorage.length == 0){
             window.location.href="index.html";
         }
-        
-        var forFirstButton="error";
-        var forSecondButton="error";
 
-        const btn1=document.querySelector(".button1");
-        const btn2=document.querySelector(".button2");
         const minLatitude = 16.000000001;
         const maxLatitude = 18.000000001;
         const minLongitude = 82.000000001;
@@ -257,15 +263,14 @@
             const hours = now.getHours();
             const minutes = now.getMinutes();
     
-           // Allowed time ranges: 10:30 AM to 11:10 AM and 2:00 PM to 4:30 PM 
-           const isMorningSlot = (hours === 10 && minutes >= 30) || (hours === 11 && minutes <= 10); 
-           const isAfternoonSlot = (hours === 14 && minutes >= 0) || (hours === 14 && minutes <= 40) || (hours > 14 && hours < 16) || (hours === 16 && minutes <= 30);
+            // Allowed time ranges: 10:30 AM to 11:10 AM and 2:00 PM to 4:30 PM 
+            const isMorningSlot = (hours === 10 && minutes >= 30) || (hours === 11 && minutes <= 10); 
+            const isAfternoonSlot = (hours === 14 && minutes >= 0) || (hours === 14 && minutes <= 40) || (hours > 14 && hours < 16) || (hours === 16 && minutes <= 30);
 
-    
             return isMorningSlot || isAfternoonSlot;
         }
     
-        function locateAndMarkAttendance(successId, errorId, timeOfDay,event) {
+        function locateAndMarkAttendance(successId, errorId, timeOfDay) {
             // Check if the current time is within the allowed time range
             if (!isWithinAllowedTimeRange()) {
                 const errorMessage = document.getElementById(errorId);
@@ -279,38 +284,65 @@
             // Show the spinner
             const spinner = document.getElementById(timeOfDay + '-spinner');
             spinner.style.display = 'block';
-            
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const { latitude, longitude } = position.coords;
-
-                    // Show Google Maps in an iframe
-                    const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&output=embed`;
-                    const mapContainer = document.getElementById('map-container');
-                    const mapIframe = document.getElementById('map-iframe');
-
-                    mapIframe.src = mapUrl;
-                    mapContainer.style.display = 'block';
-                    mapContainer.style.opacity = 1; // Trigger fade-in animation
-
-                    // Automatically mark attendance after a delay (to simulate location confirmation)
-                    setTimeout(() => {
-                        mapContainer.style.display = 'none'; // Hide map after marking attendance
-                        markAttendance(latitude, longitude, successId, errorId, timeOfDay,event);
-                    }, 5000); // 5 seconds delay for user to check location
-                }, () => {
-                    console.error('Geolocation is not available');
-                    alert('Geolocation is not supported by this browser.');
-                    spinner.style.display = 'none';
-                }, { enableHighAccuracy: true });
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-                alert('Geolocation is not supported by this browser.');
-                spinner.style.display = 'none';
-            }
-        }
     
-        function markAttendance(latitude, longitude, successId, errorId, timeOfDay,event) {
+            // Fetch the user's IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const userIp = data.ip;
+
+                    // Define the allowed IP address
+                    const allowedIp = '192.168.1.1'; // Replace this with the correct allowed IP
+
+                    // Check if the user's IP matches the allowed IP
+                    if (userIp !== allowedIp) {
+                        const errorMessage = document.getElementById(errorId);
+                        errorMessage.textContent = "Attendance cannot be marked from this network.";
+                        errorMessage.style.display = "block";
+                        errorMessage.style.opacity = 1;
+                        errorMessage.style.transform = "translateY(0)";
+                        spinner.style.display = 'none'; // Hide the spinner
+                        return;
+                    }
+
+                    // Proceed with geolocation and attendance marking if IP matches
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            const { latitude, longitude } = position.coords;
+
+                            // Show Google Maps in an iframe
+                            const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&output=embed`;
+                            const mapContainer = document.getElementById('map-container');
+                            const mapIframe = document.getElementById('map-iframe');
+
+                            mapIframe.src = mapUrl;
+                            mapContainer.style.display = 'block';
+                            mapContainer.style.opacity = 1; // Trigger fade-in animation
+
+                            // Automatically mark attendance after a delay (to simulate location confirmation)
+                            setTimeout(() => {
+                                mapContainer.style.display = 'none'; // Hide map after marking attendance
+                                markAttendance(latitude, longitude, successId, errorId, timeOfDay);
+                            }, 5000); // 5 seconds delay for user to check location
+                        }, () => {
+                            console.error('Geolocation is not available');
+                            alert('Geolocation is not supported by this browser.');
+                            spinner.style.display = 'none';
+                        }, { enableHighAccuracy: true });
+                    } else {
+                        console.error('Geolocation is not supported by this browser.');
+                        alert('Geolocation is not supported by this browser.');
+                        spinner.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching IP address:', error);
+                    alert('Unable to verify IP address. Attendance cannot be marked.');
+                    spinner.style.display = 'none'; // Hide the spinner
+                });
+        }
+
+        function markAttendance(latitude, longitude, successId, errorId, timeOfDay) {
             const successMessage = document.getElementById(successId);
             const errorMessage = document.getElementById(errorId);
 
@@ -327,30 +359,26 @@
                 successMessage.style.transform = "translateY(0)";
                 errorMessage.style.display = "none";
 
-                
-                const id=sessionStorage.getItem('id').toString();
+                const id = sessionStorage.getItem('id').toString();
 
                 fetch('https://attendence-deployment.onrender.com/saveExcel', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                       eid:id
+                        eid: id
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.msg == 'sucess') {
-                        forFirstButton="sucess";
-                        alert("Attendece Marked")
-                    } 
-                    if(data.msg == 'error'){
-                        alert('Attendence Not Marked Please Go To Office');
-                        forFirstButton="error";
-                        window.location.href="mark.html";
+                    if (data.msg === 'sucess') {
+                        alert("Attendance Marked");
+                    }
+                    if (data.msg === 'error') {
+                        alert('Attendance Not Marked. Please Go To Office');
+                        window.location.href = "mark.html";
                     }
                 })
                 .catch(error => console.error('Error marking attendance:', error));
-
 
                 // Automatically hide success message after 5 seconds
                 setTimeout(() => {
@@ -394,33 +422,29 @@
             window.location.href = 'index.html';
         });
 
-   
-    setInterval(hideAttendanceButtons, 2000);
+        setInterval(hideAttendanceButtons, 2000);
 
-    function hideAttendanceButtons() {
-    let date = new Date();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
+        function hideAttendanceButtons() {
+            let date = new Date();
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
 
-    // Hide Morning Attendance button after 11:30 AM
-    const morningButton = document.querySelector('#btn1');
-    if (hours > 12 || hours < 11){
-        morningButton.style.display = 'none';
-    } else {
-        morningButton.style.display = 'block';
-    }
+            // Hide Morning Attendance button after 11:30 AM
+            const morningButton = document.querySelector('#btn1');
+            if (hours > 12 || hours < 11) {
+                morningButton.style.display = 'none';
+            } else {
+                morningButton.style.display = 'block';
+            }
 
-    // Hide Afternoon Attendance button after 4:30 PM
-    const afternoonButton = document.querySelector('.button2');
-    if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
-        afternoonButton.style.display = 'none';
-    } 
-    else{
-        afternoonButton.style.display = 'inline-block';
-    }
-}
-
+            // Hide Afternoon Attendance button after 4:30 PM
+            const afternoonButton = document.querySelector('.button2');
+            if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
+                afternoonButton.style.display = 'none';
+            } else {
+                afternoonButton.style.display = 'inline-block';
+            }
+        }
     </script>
 </body>
 </html>
