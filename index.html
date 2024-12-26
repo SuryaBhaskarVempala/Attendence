@@ -23,6 +23,17 @@
             justify-content: center;
             align-items: center;
             height: 100%;
+            flex-direction: column; /* Added for positioning */
+        }
+
+        /* Rainbow Text Heading */
+        .attendance-heading {
+            font-size: 40px;
+            font-weight: bold;
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
         }
 
         .login-box {
@@ -116,9 +127,13 @@
         }
     </style>
 </head>
+
 <body>
     
     <div class="login-container">
+        <!-- Attendance Portal Heading -->
+        <div class="attendance-heading">Attendance Portal</div>
+
         <div class="login-box">
             <div class="logo">
                 <img src="img/mslogo__1_-removebg-preview.png" alt="Logo"> <!-- Small Logo Image -->
@@ -139,51 +154,48 @@
                 <div class="links">
                     <a href="signup.html">Sign Up</a> | <a href="forgotPassword.html">Forgot Password?</a>
                 </div>
-                </div>
-               
-               
-        <script>
-           
-            let form = document.querySelector("form");
-            let userId=document.querySelector(".username");
-            let password=document.querySelector(".password");
-           
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); 
-                jsonObject={
-                    "username":`${userId.value.trim()}`,
-                    "password":`${password.value.trim()}`
-                }
-                stringObj = JSON.stringify(jsonObject); 
-                console.log(stringObj);
-                fetch('https://attendence-deployment.onrender.com/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: stringObj
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.msg);
-                    if (data.msg == 'sucess') {
-                        sessionStorage.setItem("id",userId.value.trim());
-                        window.location.href="mark.html";
-                    } 
-                    if(data.msg == 'error'){
-                        alert('InCorrect Credentials');
-                        window.location.href="index.html";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error processing your request.Please Try After Some Time !');
-                    window.location.href="index.html";
-                });
-            });
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let form = document.querySelector("form");
+        let userId=document.querySelector(".username");
+        let password=document.querySelector(".password");
 
-        </script>
-                
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            jsonObject={
+                "username":`${userId.value.trim()}`,
+                "password":`${password.value.trim()}`
+            }
+            stringObj = JSON.stringify(jsonObject); 
+            console.log(stringObj);
+            fetch('https://attendence-deployment.onrender.com/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: stringObj
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.msg);
+                if (data.msg == 'sucess') {
+                    sessionStorage.setItem("id",userId.value.trim());
+                    window.location.href="mark.html";
+                } 
+                if(data.msg == 'error'){
+                    alert('InCorrect Credentials');
+                    window.location.href="index.html";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error processing your request.Please Try Again !');
+                window.location.href="index.html";
+            });
+        });
     </script>
 </body>
 </html>
