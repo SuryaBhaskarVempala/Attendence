@@ -6,236 +6,151 @@
     <title>Sign Up - Ms Square Technologies</title>
     <style>
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom right, #75a2d2, #00C6FF);
-    position: relative;
-}
-
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.login-box {
-    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 350px;
-    text-align: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    font-size: 34px;
-    font-weight: bold;
-    color: #222223;
-    margin-bottom: 20px;
-    font-family: 'Roboto', sans-serif; /* New font applied */
-}
-
-.logo img {
-    width: 100px; /* Adjust the size of the logo */
-    height: 125px; /* Ensure the logo maintains its aspect ratio */
-    margin-right: -30px; /* Add space between logo and text */
-}
-
-h2 {
-    margin: 20px 0;
-    font-size: 24px;
-    color: #5f31c4;
-}
-
-.input-container {
-    margin: 15px 0;
-}
-
-input {
-    width: 95%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-}
-
-button.login-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button.login-btn:hover {
-    background-color: #0056b3;
-}
-
-.links {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-.links a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-.links a:hover {
-    text-decoration: underline;
-}
-
-.form-container {
-    display: none;
-}
-
-.form-container.active {
-    display: block;
-}
-
-/* Left-top logo positioning */
-.top-left-logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 100px; /* Adjust the width as needed */
-}
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom right, #75a2d2, #00C6FF);
-    position: relative;
-}
-
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.login-box {
-    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 350px;
-    text-align: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    font-size: 34px;
-    font-weight: bold;
-    color: #222223;
-    margin-bottom: 20px;
-    font-family: 'Roboto', sans-serif; /* New font applied */
-}
-
-.logo img {
-    width: 100px; /* Adjust the size of the logo */
-    height: 125px; /* Ensure the logo maintains its aspect ratio */
-    margin-right: -30px; /* Add space between logo and text */
-}
-
-h2 {
-    margin: 20px 0;
-    font-size: 24px;
-    color: #5f31c4;
-}
-
-.input-container {
-    margin: 15px 0;
-}
-
-input {
-    width: 95%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-    outline: none;
-}
-
-button.login-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button.login-btn:hover {
-    background-color: #0056b3;
-}
-
-.links {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-.links a {
-    color: #007BFF;
-    text-decoration: none;
-}
-
-.links a:hover {
-    text-decoration: underline;
-}
-
-.form-container {
-    display: none;
-}
-
-.form-container.active {
-    display: block;
-}
-
-/* Left-top logo positioning */
-.top-left-logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 100px; /* Adjust the width as needed */
-}
-
-.error{
-    border: 2px solid red;
-}
-.active{
-    border: 2px solid green;
-}
-    </style>
-    <style>
-        .error {
-            border-color: red;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #75a2d2, #00C6FF);
+            position: relative;
         }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 34px;
+            font-weight: bold;
+            color: #222223;
+            margin-bottom: 20px;
+            font-family: 'Roboto', sans-serif; /* New font applied */
+        }
+
+        .logo img {
+            width: 100px; /* Adjust the size of the logo */
+            height: 125px; /* Ensure the logo maintains its aspect ratio */
+            margin-right: -30px; /* Add space between logo and text */
+        }
+
+        h2 {
+            margin: 20px 0;
+            font-size: 24px;
+            color: #5f31c4;
+        }
+
+        .input-container {
+            margin: 15px 0;
+        }
+
+        input {
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        button.login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button.login-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .links {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        /* Left-top logo positioning */
+        .top-left-logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px; /* Adjust the width as needed */
+        }
+
+        /* Loading spinner styles */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            text-align: center;
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            border: 10px solid #f3f3f3;
+            border-top: 10px solid #3498db;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        .percentage {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            border: 2px solid red;
+        }
+
         .active {
-            border-color: green;
+            border: 2px solid green;
         }
     </style>
 </head>
@@ -273,6 +188,13 @@ button.login-btn:hover {
             </div>
         </div>
     </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner">
+        <div class="circle"></div>
+        <div class="percentage">0%</div>
+    </div>
+
     <script>
         const form = document.querySelector("form");
         const nameInput = document.querySelector(".name");
@@ -284,11 +206,9 @@ button.login-btn:hover {
 
         let isName = false, isId = false, isMobileNum = false, isEmail = false, isPassword = false, isConfirmPassword = false;
 
-
         // Name validation
         nameInput.addEventListener('keyup', function() {
             let nameValue = nameInput.value.trim();
-
             if (nameValue.length > 6) {
                 nameInput.classList.remove('error');
                 nameInput.classList.add('active');
@@ -304,7 +224,6 @@ button.login-btn:hover {
         id.addEventListener('keyup', function() {
             let idValue = id.value.trim();
             regx(idValue);
-
             function regx(val) {
                 let reg = /^MS[ST][0-2][0-5]\d{4}$/;
                 isId = reg.test(val);
@@ -323,7 +242,6 @@ button.login-btn:hover {
         // Mobile number validation
         mobile_num.addEventListener('keyup', function() {
             regx(mobile_num.value.trim());
-
             function regx(val) {
                 let reg = /^[6-9]\d{9}$/;
                 isMobileNum = reg.test(val);
@@ -342,7 +260,6 @@ button.login-btn:hover {
         // Email validation
         email.addEventListener('keyup', function() {
             regx(email.value.trim());
-
             function regx(val) {
                 let reg = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
                 isEmail = reg.test(val);
@@ -361,7 +278,6 @@ button.login-btn:hover {
         // Password validation
         password.addEventListener('keyup', function() { 
             let passwordValue = password.value.trim(); 
-
             if (passwordValue.length > 8) { 
                 password.classList.remove('error'); 
                 password.classList.add('active'); 
@@ -391,15 +307,31 @@ button.login-btn:hover {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if (isName && isId && isMobileNum && isEmail && isPassword && isConfirmPassword) {
-                const jsonObject={
-                    "name":`${nameInput.value.trim()}`,
-                    "eid":`${id.value.trim()}`,
-                    "mobile":`${mobile_num.value.trim()}`,
-                    "email":`${email.value.trim()}`,
-                    "password":`${password.value.trim()}`
+                const jsonObject={ 
+                    "name":`${nameInput.value.trim()}`, 
+                    "eid":`${id.value.trim()}`, 
+                    "mobile":`${mobile_num.value.trim()}`, 
+                    "email":`${email.value.trim()}`, 
+                    "password":`${password.value.trim()}` 
                 }
                 stringObj = JSON.stringify(jsonObject); 
                 console.log(stringObj);
+
+                // Show loading spinner and start simulating loading
+                const spinner = document.querySelector(".loading-spinner");
+                spinner.style.display = 'block';
+                let percentage = 0;
+                const percentageDisplay = document.querySelector(".percentage");
+
+                const interval = setInterval(() => {
+                    percentage += 10;
+                    percentageDisplay.textContent = percentage + '%';
+
+                    if (percentage >= 100) {
+                        clearInterval(interval); // Stop when it reaches 100%
+                    }
+                }, 1000);
+
                 fetch('https://attendence-deployment.onrender.com/signup', {
                     method: 'POST',
                     headers: {
