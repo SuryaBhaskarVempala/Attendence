@@ -118,26 +118,38 @@
         .error{
             border: 2px solid red;
         }
-
         .active{
             border: 2px solid green;
         }
 
-        /* New CSS for the loading spinner and progress */
+        /* Loading Spinner and Progress */
         .loading-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
             display: none;
-            text-align: center;
-            margin-top: 20px;
         }
 
-        .loading-circle {
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #3498db;
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 2s linear infinite;
-            margin: 0 auto;
+        }
+
+        .loading-text {
+            margin-left: 20px;
+            font-size: 18px;
+            color: #3498db;
         }
 
         @keyframes spin {
@@ -145,10 +157,19 @@
             100% { transform: rotate(360deg); }
         }
 
-        .percentage {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #3498db;
+        .progress-bar-container {
+            width: 100%;
+            background: #ddd;
+            margin-top: 20px;
+            border-radius: 5px;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #007BFF;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -184,13 +205,13 @@
             <div class="links">
                 <a href="index.html">Already have an account? Login</a>
             </div>
-            <!-- Loading Circle and Percentage -->
-            <div class="loading-container">
-                <div class="loading-circle"></div>
-                <div class="percentage">0%</div>
-            </div>
         </div>
     </div>
+    <div class="loading-container" id="loading-container">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Loading...</div>
+    </div>
+
     <script>
         const form = document.querySelector("form");
         const nameInput = document.querySelector(".name");
@@ -200,14 +221,12 @@
         const password = document.querySelector(".password");
         const confirm_password = document.querySelector(".confirm-password");
 
-        const loadingContainer = document.querySelector('.loading-container');
-        const percentageDisplay = document.querySelector('.percentage');
-
         let isName = false, isId = false, isMobileNum = false, isEmail = false, isPassword = false, isConfirmPassword = false;
 
         // Name validation
         nameInput.addEventListener('keyup', function() {
             let nameValue = nameInput.value.trim();
+
             if (nameValue.length > 6) {
                 nameInput.classList.remove('error');
                 nameInput.classList.add('active');
@@ -280,6 +299,7 @@
         // Password validation
         password.addEventListener('keyup', function() { 
             let passwordValue = password.value.trim(); 
+
             if (passwordValue.length > 8) { 
                 password.classList.remove('error'); 
                 password.classList.add('active'); 
@@ -304,9 +324,29 @@
             }
         });
 
-        // Sending data to Spring Boot API with loading effect
+        //sending data to Spring boot api:
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            const loadingContainer = document.getElementById('loading-container');
+            const loadingText = document.getElementById('loading-text');
+            const progressBar = document.createElement('div');
+            progressBar.classList.add('progress-bar');
+            const progressBarContainer = document.createElement('div');
+            progressBarContainer.classList.add('progress-bar-container');
+            progressBarContainer.appendChild(progressBar);
+            loadingContainer.appendChild(progressBarContainer);
+
+            let progress = 0;
+            let interval = setInterval(function() {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                loadingText.textContent = 'Loading ' + progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 100);
+
             if (isName && isId && isMobileNum && isEmail && isPassword && isConfirmPassword) {
                 const jsonObject = {
                     "name": `${nameInput.value.trim()}`,
@@ -315,17 +355,9 @@
                     "email": `${email.value.trim()}`,
                     "password": `${password.value.trim()}`
                 };
-                const stringObj = JSON.stringify(jsonObject);
-
-                // Show loading circle and start progress
-                loadingContainer.style.display = 'block';
-                let progress = 0;
-                let progressInterval = setInterval(function() {
-                    if (progress < 100) {
-                        progress += 10;
-                        percentageDisplay.textContent = progress + '%';
-                    }
-                }, 200);
+                stringObj = JSON.stringify(jsonObject); 
+                console.log(stringObj);
+                loadingContainer.style.display = 'flex';
 
                 fetch('https://attendence-deployment.onrender.com/signup', {
                     method: 'POST',
@@ -336,31 +368,33 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    clearInterval(progressInterval);
-                    loadingContainer.style.display = 'none'; // Hide loading spinner
-
+                    console.log(data);
+                    loadingContainer.style.display = 'none';
                     if (data.msg === 'sucess') {
                         alert('Signup successful');
                         window.location.href = "index.html";
-                    } else if (data.msg === 'idTaken') {
+                    }
+                    if (data.msg === 'idTaken') {
                         alert('ID Already Taken Please Go To Login !');
                         window.location.href = "signup.html";
-                    } else if (data.msg === 'emailTaken') {
+                    }
+                    if (data.msg === 'emailTaken') {
                         alert('Email Already Taken');
                         window.location.href = "signup.html";
-                    } else if (data.msg === 'error') {
+                    }
+                    if (data.msg == 'error') {
                         alert('Signup failed');
                         window.location.href = "signup.html";
                     }
                 })
                 .catch(error => {
-                    clearInterval(progressInterval);
-                    loadingContainer.style.display = 'none'; // Hide loading spinner
                     console.error('Error:', error);
-                    alert('There was an error processing your request. Please Try After Some Time !');
+                    alert('There was an error processing your request.Please Try After Some Time !');
+                    loadingContainer.style.display = 'none';
                 });
             } else {
                 alert("Please Enter Valid Credentials !");
+                loadingContainer.style.display = 'none';
             }
         });
     </script>
