@@ -126,7 +126,6 @@
             width: 100px;  /* Adjust the width as needed */
         }
 
-        /* Circular Loading Spinner */
         /* Loading Spinner and Progress */
         .loading-container {
             position: absolute;
@@ -142,30 +141,6 @@
             display: none;
         }
 
-        .circular-progress {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 10px solid #f3f3f3; /* Gray background */
-        }
-        .circular-progress:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(
-                red 0% 10%, 
-                orange 10% 20%, 
-                yellow 20% 30%, 
-                green 30% 40%, 
-                blue 40% 50%, 
-                indigo 50% 60%, 
-                violet 60% 70%, 
-                #f3f3f3 70% 100%
-            );
         .spinner {
             border: 8px solid #f3f3f3;
             border-top: 8px solid #3498db;
@@ -176,17 +151,16 @@
         }
 
         .loading-text {
-            position: absolute;
             margin-left: 20px;
             font-size: 18px;
             color: #3498db;
-            font-weight: bold;
-            text-align: center;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         .progress-bar-container {
             width: 100%;
             background: #ddd;
@@ -194,6 +168,7 @@
             border-radius: 5px;
             height: 10px;
         }
+
         .progress-bar {
             height: 100%;
             width: 0%;
@@ -204,7 +179,7 @@
 </head>
 
 <body>
-
+    
     <div class="login-container">
         <!-- Attendance Portal Heading -->
         <div class="attendance-heading">Attendance Portal</div>
@@ -232,30 +207,24 @@
             </div>
         </div>
     </div>
-
-    <!-- Loading Spinner -->
+    
     <!-- Loading Spinner and Progress -->
     <div class="loading-container" id="loading-container">
-        <div class="circular-progress">
-            <div class="loading-text" id="loading-text">0%</div>
-        </div>
         <div class="spinner"></div>
         <div class="loading-text" id="loading-text">Loading...</div>
     </div>
-
+    
     <script>
         let form = document.querySelector("form");
         let userId = document.querySelector(".username");
         let password = document.querySelector(".password");
-        let loadingContainer = document.getElementById("loading-container");
-        let loadingText = document.getElementById("loading-text");
 
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
 
-            // Show loading spinner
-            // Show loading spinner and progress
-            loadingContainer.style.display = 'flex';
+            // Add progress bar
+            const loadingContainer = document.getElementById('loading-container');
+            const loadingText = document.getElementById('loading-text');
             let progressBar = document.createElement('div');
             progressBar.classList.add('progress-bar');
             let progressBarContainer = document.createElement('div');
@@ -266,22 +235,23 @@
             let progress = 0;
             let interval = setInterval(function() {
                 progress += 10;
-                loadingText.textContent = progress + '%';
                 progressBar.style.width = progress + '%';
                 loadingText.textContent = 'Loading ' + progress + '%';
-
                 if (progress >= 100) {
                     clearInterval(interval);
                 }
-            }, 300); // Update every 300ms
+            }, 100);
 
-            let jsonObject = {
+            // Show loading container
+            loadingContainer.style.display = 'flex';
+
+            jsonObject = {
                 "username": `${userId.value.trim()}`,
                 "password": `${password.value.trim()}`
             };
-            let stringObj = JSON.stringify(jsonObject); 
+            stringObj = JSON.stringify(jsonObject); 
             console.log(stringObj);
-
+            
             fetch('https://attendence-deployment.onrender.com/login', {
                 method: 'POST',
                 headers: {
@@ -292,6 +262,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data.msg);
+                loadingContainer.style.display = 'none';
                 if (data.msg == 'sucess') {
                     sessionStorage.setItem("id", userId.value.trim());
                     window.location.href = "mark.html";
@@ -300,13 +271,12 @@
                     alert('InCorrect Credentials');
                     window.location.href = "index.html";
                 }
-                loadingContainer.style.display = 'none'; // Hide the loading spinner after login
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('There was an error processing your request. Please Try Again!');
+                loadingContainer.style.display = 'none';
                 window.location.href = "index.html";
-                loadingContainer.style.display = 'none'; // Hide the loading spinner if there's an error
             });
         });
     </script>
