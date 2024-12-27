@@ -126,7 +126,7 @@
             width: 100px;  /* Adjust the width as needed */
         }
 
-        /* Loading Spinner and Progress */
+        /* Circular Loading Spinner */
         .loading-container {
             position: absolute;
             top: 0;
@@ -141,39 +141,40 @@
             display: none;
         }
 
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
+        .circular-progress {
+            position: relative;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
+            border: 10px solid #f3f3f3; /* Gray background */
+        }
+
+        .circular-progress:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(
+                red 0% 10%, 
+                orange 10% 20%, 
+                yellow 20% 30%, 
+                green 30% 40%, 
+                blue 40% 50%, 
+                indigo 50% 60%, 
+                violet 60% 70%, 
+                #f3f3f3 70% 100%
+            );
+            border-radius: 50%;
         }
 
         .loading-text {
-            margin-left: 20px;
+            position: absolute;
             font-size: 18px;
             color: #3498db;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            background: #ddd;
-            margin-top: 20px;
-            border-radius: 5px;
-            height: 10px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #007BFF;
-            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
@@ -208,10 +209,11 @@
         </div>
     </div>
 
-    <!-- Loading Spinner and Progress -->
+    <!-- Loading Spinner -->
     <div class="loading-container" id="loading-container">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loading-text">Loading...</div>
+        <div class="circular-progress">
+            <div class="loading-text" id="loading-text">0%</div>
+        </div>
     </div>
     
     <script>
@@ -224,20 +226,13 @@
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
             
-            // Show loading spinner and progress
+            // Show loading spinner
             loadingContainer.style.display = 'flex';
-            let progressBar = document.createElement('div');
-            progressBar.classList.add('progress-bar');
-            let progressBarContainer = document.createElement('div');
-            progressBarContainer.classList.add('progress-bar-container');
-            progressBarContainer.appendChild(progressBar);
-            loadingContainer.appendChild(progressBarContainer);
 
             let progress = 0;
             let interval = setInterval(function() {
                 progress += 10;
-                progressBar.style.width = progress + '%';
-                loadingText.textContent = 'Loading ' + progress + '%';
+                loadingText.textContent = progress + '%';
 
                 if (progress >= 100) {
                     clearInterval(interval);
