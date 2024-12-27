@@ -203,7 +203,8 @@
                 <button type="submit" class="login-btn">Sign Up</button>
             </form>
             <div class="links">
-                <a href="index.html">Already have an account? Login</a>
+                <a href="index.html">Already have an account? Login</a><br>
+                <a href="recover-password.html">Forgot Password?</a> <!-- Link for password recovery -->
             </div>
         </div>
     </div>
@@ -335,6 +336,8 @@
                 setTimeout(function () {
                     alert('Sign up Successful');
                     hideLoadingScreen();
+                    // Redirect to login page after successful signup
+                    window.location.href = "login.html"; // Redirects to login page
                 }, 3000);
             } else {
                 alert('Please fill in all the fields correctly');
