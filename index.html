@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Ms Square Technologies</title>
+    <title>Login & Sign Up - Ms Square Technologies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -22,6 +23,17 @@
             justify-content: center;
             align-items: center;
             height: 100%;
+            flex-direction: column; /* Added for positioning */
+        }
+
+        /* Rainbow Text Heading */
+        .attendance-heading {
+            font-size: 40px;
+            font-weight: bold;
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
         }
 
         .login-box {
@@ -66,7 +78,6 @@
             border-radius: 5px;
             border: 1px solid #ddd;
             font-size: 16px;
-            outline: none;
         }
 
         button.login-btn {
@@ -112,290 +123,78 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 100px; /* Adjust the width as needed */
-        }
-
-        .error{
-            border: 2px solid red;
-        }
-        .active{
-            border: 2px solid green;
-        }
-
-        /* Loading Spinner and Progress */
-        .loading-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            display: none;
-        }
-
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-        }
-
-        .loading-text {
-            margin-left: 20px;
-            font-size: 18px;
-            color: #3498db;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            background: #ddd;
-            margin-top: 20px;
-            border-radius: 5px;
-            height: 10px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #007BFF;
-            border-radius: 5px;
+            width: 100px;  /* Adjust the width as needed */
         }
     </style>
 </head>
+
 <body>
+    
     <div class="login-container">
+        <!-- Attendance Portal Heading -->
+        <div class="attendance-heading">Attendance Portal</div>
+
         <div class="login-box">
             <div class="logo">
-                <img src="img/mslogo__1_-removebg-preview.png" alt="Logo">
+                <img src="img/mslogo__1_-removebg-preview.png" alt="Logo"> <!-- Small Logo Image -->
                 Ms Square Technologies
             </div>
-            <h2>SIGN UP</h2>
-            <form id="signupForm" action="index.html" method="POST">
-                <div class="input-container">
-                    <input type="text" placeholder="Full Name" name="full_name" class="name" required>
+            <!-- Login Form -->
+            <div id="login-form" class="form-container active">
+                <h2>LOGIN</h2>
+                <form action="#" method="POST">
+                    <div class="input-container">
+                        <input type="text" placeholder="Company-ID" name="username" class="username" required>
+                    </div>
+                    <div class="input-container">
+                        <input type="password" placeholder="Password" name="password" class="password" required>
+                    </div>
+                    <button type="submit" class="login-btn">Log In</button>
+                </form>
+                <div class="links">
+                    <a href="signup.html">Sign Up</a> | <a href="forgotPassword.html">Forgot Password?</a>
                 </div>
-                <div class="input-container">
-                    <input type="text" placeholder="ID" name="id" class="id" required>
-                </div>
-                <div class="input-container">
-                    <input type="text" placeholder="Mobile Number" name="mobile_number" class="mobile_num" required>
-                </div>
-                <div class="input-container">
-                    <input type="email" placeholder="Email" name="email" class="email" required>
-                </div>
-                <div class="input-container">
-                    <input type="password" placeholder="Password" name="password" class="password" required>
-                </div>
-                <div class="input-container">
-                    <input type="password" placeholder="Confirm Password" name="confirm_password" class="confirm-password" required>
-                </div>
-                <button type="submit" class="login-btn">Sign Up</button>
-            </form>
-            <div class="links">
-                <a href="index.html">Already have an account? Login</a>
             </div>
         </div>
     </div>
-    <div class="loading-container" id="loading-container">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loading-text">Loading...</div>
-    </div>
-
+    
     <script>
-        const form = document.querySelector("form");
-        const nameInput = document.querySelector(".name");
-        const id = document.querySelector(".id");
-        const mobile_num = document.querySelector(".mobile_num");
-        const email = document.querySelector(".email");
-        const password = document.querySelector(".password");
-        const confirm_password = document.querySelector(".confirm-password");
+        let form = document.querySelector("form");
+        let userId=document.querySelector(".username");
+        let password=document.querySelector(".password");
 
-        let isName = false, isId = false, isMobileNum = false, isEmail = false, isPassword = false, isConfirmPassword = false;
-
-        // Name validation
-        nameInput.addEventListener('keyup', function() {
-            let nameValue = nameInput.value.trim();
-
-            if (nameValue.length > 6) {
-                nameInput.classList.remove('error');
-                nameInput.classList.add('active');
-                isName = true;
-            } else {
-                nameInput.classList.add('error');
-                nameInput.classList.remove('active');
-                isName = false;
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            jsonObject={
+                "username":`${userId.value.trim()}`,
+                "password":`${password.value.trim()}`
             }
-        });
-
-        // ID validation
-        id.addEventListener('keyup', function() {
-            let idValue = id.value.trim();
-            regx(idValue);
-
-            function regx(val) {
-                let reg = /^MS[ST][0-2][0-5]\d{4}$/;
-                isId = reg.test(val);
-                if (isId) {
-                    id.classList.remove('error');
-                    id.classList.add('active');
-                    isId = true;
-                } else {
-                    id.classList.remove('active');
-                    id.classList.add('error');
-                    isId = false;
+            stringObj = JSON.stringify(jsonObject); 
+            console.log(stringObj);
+            fetch('https://attendence-deployment.onrender.com/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: stringObj
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.msg);
+                if (data.msg == 'sucess') {
+                    sessionStorage.setItem("id",userId.value.trim());
+                    window.location.href="mark.html";
+                } 
+                if(data.msg == 'error'){
+                    alert('InCorrect Credentials');
+                    window.location.href="index.html";
                 }
-            }
-        });
-
-        // Mobile number validation
-        mobile_num.addEventListener('keyup', function() {
-            regx(mobile_num.value.trim());
-
-            function regx(val) {
-                let reg = /^[6-9]\d{9}$/;
-                isMobileNum = reg.test(val);
-                if (isMobileNum) {
-                    mobile_num.classList.remove('error');
-                    mobile_num.classList.add('active');
-                    isMobileNum = true;
-                } else {
-                    mobile_num.classList.add('error');
-                    mobile_num.classList.remove('active');
-                    isMobileNum = false;
-                }
-            }
-        });
-
-        // Email validation
-        email.addEventListener('keyup', function() {
-            regx(email.value.trim());
-
-            function regx(val) {
-                let reg = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-                isEmail = reg.test(val);
-                if (isEmail) {
-                    email.classList.remove('error');
-                    email.classList.add('active');
-                    isEmail = true;
-                } else {
-                    email.classList.add('error');
-                    email.classList.remove('active');
-                    isEmail = false;
-                }
-            }
-        });
-
-        // Password validation
-        password.addEventListener('keyup', function() { 
-            let passwordValue = password.value.trim(); 
-
-            if (passwordValue.length > 8) { 
-                password.classList.remove('error'); 
-                password.classList.add('active'); 
-                isPassword = true; 
-            } else { 
-                password.classList.add('error'); 
-                password.classList.remove('active'); 
-                isPassword = false; 
-            } 
-        });
-
-        // Confirm password validation
-        confirm_password.addEventListener('keyup', function() {
-            if (confirm_password.value === password.value.trim()) {
-                confirm_password.classList.remove('error'); 
-                confirm_password.classList.add('active'); 
-                isConfirmPassword = true; 
-            } else {
-                confirm_password.classList.remove('active');
-                confirm_password.classList.add('error');
-                isConfirmPassword = false;
-            }
-        });
-
-        //sending data to Spring boot api:
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const loadingContainer = document.getElementById('loading-container');
-            const loadingText = document.getElementById('loading-text');
-            const progressBar = document.createElement('div');
-            progressBar.classList.add('progress-bar');
-            const progressBarContainer = document.createElement('div');
-            progressBarContainer.classList.add('progress-bar-container');
-            progressBarContainer.appendChild(progressBar);
-            loadingContainer.appendChild(progressBarContainer);
-
-            let progress = 0;
-            let interval = setInterval(function() {
-                progress += 10;
-                progressBar.style.width = progress + '%';
-                loadingText.textContent = 'Loading ' + progress + '%';
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                }
-            }, 100);
-
-            if (isName && isId && isMobileNum && isEmail && isPassword && isConfirmPassword) {
-                const jsonObject = {
-                    "name": `${nameInput.value.trim()}`,
-                    "eid": `${id.value.trim()}`,
-                    "mobile": `${mobile_num.value.trim()}`,
-                    "email": `${email.value.trim()}`,
-                    "password": `${password.value.trim()}`
-                };
-                stringObj = JSON.stringify(jsonObject); 
-                console.log(stringObj);
-                loadingContainer.style.display = 'flex';
-
-                fetch('https://attendence-deployment.onrender.com/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: stringObj
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    loadingContainer.style.display = 'none';
-                    if (data.msg === 'sucess') {
-                        alert('Signup successful');
-                        window.location.href = "index.html";
-                    }
-                    if (data.msg === 'idTaken') {
-                        alert('ID Already Taken Please Go To Login !');
-                        window.location.href = "signup.html";
-                    }
-                    if (data.msg === 'emailTaken') {
-                        alert('Email Already Taken');
-                        window.location.href = "signup.html";
-                    }
-                    if (data.msg == 'error') {
-                        alert('Signup failed');
-                        window.location.href = "signup.html";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error processing your request.Please Try After Some Time !');
-                    loadingContainer.style.display = 'none';
-                });
-            } else {
-                alert("Please Enter Valid Credentials !");
-                loadingContainer.style.display = 'none';
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error processing your request.Please Try Again !');
+                window.location.href="index.html";
+            });
         });
     </script>
 </body>
