@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance System</title>
-     <!-- Add the favicon link here -->
+    <!-- Add the favicon link here -->
     <link rel="shortcut icon" href="img/logo5.ico" type="image/x-icon">
     <style>
         body {
@@ -212,7 +212,7 @@
                 <h3>Afternoon Attendance</h3>
                 <div class="status-message success" id="afternoon-status-success">Attendance Marked!</div>
                 <div class="status-message error" id="afternoon-status-error">Attendance Not Marked</div>
-                <button  onclick="locateAndMarkAttendance('afternoon-status-success', 'afternoon-status-error', 'afternoon')" class="button2">
+                <button onclick="locateAndMarkAttendance('afternoon-status-success', 'afternoon-status-error', 'afternoon')" class="button2">
                     Mark Afternoon Attendance
                     <div class="loading-spinner" id="afternoon-spinner"></div>
                 </button>
@@ -259,7 +259,7 @@
             const hours = now.getHours();
             const minutes = now.getMinutes();
     
-           // Allowed time ranges: 10:30 AM to 11:10 AM and 2:00 PM to 4:30 PM 
+           // Allowed time ranges: 10:30 AM to 11:10 AM and 2:00 PM to 2:40 PM 
            const isMorningSlot = (hours === 10 && minutes >= 30) || (hours === 11 && minutes <= 10); 
            const isAfternoonSlot = (hours === 14 && minutes >= 0) || (hours === 14 && minutes <= 40) || (hours > 14 && hours < 16) || (hours === 16 && minutes <= 30);
 
@@ -275,6 +275,10 @@
                 errorMessage.style.display = "block";
                 errorMessage.style.opacity = 1; // Trigger fade-in animation
                 errorMessage.style.transform = "translateY(0)";
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000); // 3 seconds delay
                 return;
             }
 
@@ -348,81 +352,51 @@
                     if(data.msg == 'error'){
                         alert('Attendence Not Marked Please Go To Office');
                         forFirstButton="error";
-                        window.location.href="mark.html";
                     }
                 })
-                .catch(error => console.error('Error marking attendance:', error));
+                .catch((error) => {
+                    alert("Error: Unable to submit data. Please try again later.");
+                    forFirstButton="error";
+                });
 
-
-                // Automatically hide success message after 5 seconds
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                    document.getElementById(timeOfDay + '-spinner').style.display = 'none'; // Hide spinner
-                    window.location.href = 'index.html';  // Redirect to login page after attendance marked
-                }, 5000); // 5 seconds delay
-
-                // Send data to the backend
-                fetch('/mark-attendance', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        date: currentDate,
-                        latitude,
-                        longitude,
-                        status: 'present',
-                        timeOfDay: timeOfDay
-                    })
-                })
-                .then(response => response.json())
-                .then(data => console.log('Attendance marked successfully:', data))
-                .catch(error => console.error('Error marking attendance:', error));
             } else {
-                successMessage.style.display = "none";
                 errorMessage.style.display = "block";
                 errorMessage.style.opacity = 1; // Trigger fade-in animation
                 errorMessage.style.transform = "translateY(0)";
+                successMessage.style.display = "none";
+            }
 
-                // Automatically hide error message after 5 seconds
-                setTimeout(() => {
-                    errorMessage.style.display = "none";
-                    document.getElementById(timeOfDay + '-spinner').style.display = 'none'; // Hide spinner
-                    window.location.href = 'index.html';  // Redirect to login page after failure
-                }, 5000); // 5 seconds delay
+            const spinner = document.getElementById(timeOfDay + '-spinner');
+            spinner.style.display = 'none';
+        }
+    
+        setInterval(hideAttendanceButtons, 2000); // Keep your existing interval for the buttons' visibility
+
+        function hideAttendanceButtons() {
+            let date = new Date();
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+
+            // Hide Morning Attendance button after 11:15 AM
+            const morningButton = document.querySelector('#btn1');
+            if (hours === 11 && minutes > 15 || hours > 11) {
+                morningButton.style.display = 'none';
+            } else if (hours >= 10 && minutes >= 30 && hours < 11 || (hours === 11 && minutes <= 15)) {
+                morningButton.style.display = 'inline-block';
+            } else {
+                morningButton.style.display = 'none';
+            }
+
+            // Hide Afternoon Attendance button after 2:45 PM
+            const afternoonButton = document.querySelector('.button2');
+            if (hours === 14 && minutes > 45 || hours > 14) {
+                afternoonButton.style.display = 'none';
+            } else if (hours === 14 && minutes >= 0 && minutes <= 45) {
+                afternoonButton.style.display = 'inline-block';
+            } else {
+                afternoonButton.style.display = 'none';
             }
         }
-
-        // Redirect to index.html when the page is refreshed or unloaded
-        window.addEventListener('beforeunload', function () {
-            window.location.href = 'index.html';
-        });
-
-   
-    setInterval(hideAttendanceButtons, 2000);
-
-    function hideAttendanceButtons() {
-    let date = new Date();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-
-    // Hide Morning Attendance button after 11:30 AM
-    //const morningButton = document.querySelector('#btn1');
-    //if (hours > 12 || hours < 11){
-      //  morningButton.style.display = 'none';
-    //} else {
-      //  morningButton.style.display = 'block';
-    //}
-
-    // Hide Afternoon Attendance button after 4:30 PM
-    //const afternoonButton = document.querySelector('.button2');
-    //if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
-      //  afternoonButton.style.display = 'none';
-    //} 
-    //else{
-      //  afternoonButton.style.display = 'inline-block';
-    //}
-}
-
     </script>
 </body>
 </html>
