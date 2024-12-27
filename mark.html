@@ -404,21 +404,21 @@
     const seconds = date.getSeconds();
 
     // Hide Morning Attendance button after 11:30 AM
-    const morningButton = document.querySelector('#btn1');
-    if (hours > 12 || hours < 11){
-        morningButton.style.display = 'none';
-    } else {
-        morningButton.style.display = 'block';
-    }
+    //const morningButton = document.querySelector('#btn1');
+    //if (hours > 12 || hours < 11){
+      //  morningButton.style.display = 'none';
+    //} else {
+      //  morningButton.style.display = 'block';
+    //}
 
     // Hide Afternoon Attendance button after 4:30 PM
-    const afternoonButton = document.querySelector('.button2');
-    if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
-        afternoonButton.style.display = 'none';
-    } 
-    else{
-        afternoonButton.style.display = 'inline-block';
-    }
+    //const afternoonButton = document.querySelector('.button2');
+    //if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
+      //  afternoonButton.style.display = 'none';
+    //} 
+    //else{
+      //  afternoonButton.style.display = 'inline-block';
+    //}
 }
 
     </script>
