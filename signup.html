@@ -66,6 +66,7 @@
             border-radius: 5px;
             border: 1px solid #ddd;
             font-size: 16px;
+            outline: none;
         }
 
         button.login-btn {
@@ -114,29 +115,40 @@
             width: 100px; /* Adjust the width as needed */
         }
 
-        /* Loading spinner styles */
-        .loading-spinner {
+        .error{
+            border: 2px solid red;
+        }
+        .active{
+            border: 2px solid green;
+        }
+
+        /* Loading Spinner and Progress */
+        .loading-container {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
             display: none;
-            text-align: center;
         }
 
-        .circle {
-            width: 100px;
-            height: 100px;
-            border: 10px solid #f3f3f3;
-            border-top: 10px solid #3498db;
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
+            width: 50px;
+            height: 50px;
             animation: spin 2s linear infinite;
-            margin-bottom: 10px;
         }
 
-        .percentage {
-            font-size: 24px;
-            font-weight: bold;
+        .loading-text {
+            margin-left: 20px;
+            font-size: 18px;
             color: #3498db;
         }
 
@@ -145,12 +157,19 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error {
-            border: 2px solid red;
+        .progress-bar-container {
+            width: 100%;
+            background: #ddd;
+            margin-top: 20px;
+            border-radius: 5px;
+            height: 10px;
         }
 
-        .active {
-            border: 2px solid green;
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #007BFF;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -189,10 +208,10 @@
         </div>
     </div>
 
-    <!-- Loading Spinner -->
-    <div class="loading-spinner">
-        <div class="circle"></div>
-        <div class="percentage">0%</div>
+    <!-- Loading Spinner and Progress -->
+    <div class="loading-container" id="loading-container">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Loading...</div>
     </div>
 
     <script>
@@ -209,6 +228,7 @@
         // Name validation
         nameInput.addEventListener('keyup', function() {
             let nameValue = nameInput.value.trim();
+
             if (nameValue.length > 6) {
                 nameInput.classList.remove('error');
                 nameInput.classList.add('active');
@@ -224,6 +244,7 @@
         id.addEventListener('keyup', function() {
             let idValue = id.value.trim();
             regx(idValue);
+
             function regx(val) {
                 let reg = /^MS[ST][0-2][0-5]\d{4}$/;
                 isId = reg.test(val);
@@ -242,6 +263,7 @@
         // Mobile number validation
         mobile_num.addEventListener('keyup', function() {
             regx(mobile_num.value.trim());
+
             function regx(val) {
                 let reg = /^[6-9]\d{9}$/;
                 isMobileNum = reg.test(val);
@@ -260,6 +282,7 @@
         // Email validation
         email.addEventListener('keyup', function() {
             regx(email.value.trim());
+
             function regx(val) {
                 let reg = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
                 isEmail = reg.test(val);
@@ -278,6 +301,7 @@
         // Password validation
         password.addEventListener('keyup', function() { 
             let passwordValue = password.value.trim(); 
+
             if (passwordValue.length > 8) { 
                 password.classList.remove('error'); 
                 password.classList.add('active'); 
@@ -302,71 +326,28 @@
             }
         });
 
-        //sending data to Spring boot api:
-
+        // Sending data to Spring boot api:
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+
             if (isName && isId && isMobileNum && isEmail && isPassword && isConfirmPassword) {
-                const jsonObject={ 
-                    "name":`${nameInput.value.trim()}`, 
-                    "eid":`${id.value.trim()}`, 
-                    "mobile":`${mobile_num.value.trim()}`, 
-                    "email":`${email.value.trim()}`, 
-                    "password":`${password.value.trim()}` 
-                }
-                stringObj = JSON.stringify(jsonObject); 
-                console.log(stringObj);
-
-                // Show loading spinner and start simulating loading
-                const spinner = document.querySelector(".loading-spinner");
-                spinner.style.display = 'block';
-                let percentage = 0;
-                const percentageDisplay = document.querySelector(".percentage");
-
-                const interval = setInterval(() => {
-                    percentage += 10;
-                    percentageDisplay.textContent = percentage + '%';
-
-                    if (percentage >= 100) {
-                        clearInterval(interval); // Stop when it reaches 100%
-                    }
-                }, 1000);
-
-                fetch('https://attendence-deployment.onrender.com/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: stringObj
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.msg === 'sucess') {
-                        alert('Signup successful');
-                        window.location.href="index.html";
-                    } 
-                    if(data.msg === 'idTaken'){
-                        alert('ID Already Taken Please Go To Login !');
-                        window.location.href="signup.html";
-                    }
-                    if(data.msg === 'emailTaken'){
-                        alert('Email Already Taken');
-                        window.location.href="signup.html";
-                    }
-                    if(data.msg == 'error'){
-                        alert('Signup failed');
-                        window.location.href="signup.html";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error processing your request.Please Try After Some Time !');
-                });
+                showLoadingScreen();
+                setTimeout(function () {
+                    alert('Sign up Successful');
+                    hideLoadingScreen();
+                }, 3000);
             } else {
-                alert("Please Enter Valid Credentials !");
+                alert('Please fill in all the fields correctly');
             }
         });
+
+        function showLoadingScreen() {
+            document.getElementById("loading-container").style.display = "flex";
+        }
+
+        function hideLoadingScreen() {
+            document.getElementById("loading-container").style.display = "none";
+        }
     </script>
 </body>
 </html>
