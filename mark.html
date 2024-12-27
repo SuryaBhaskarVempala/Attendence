@@ -195,7 +195,7 @@
         <div class="attendance-box">
             <div class="box">
                 <h3>Morning Attendance</h3>
-                <div class="status-message success" id="morning-status-success"></div>
+                <div class="status-message success" id="morning-status-success">Attendance Marked!</div>
                 <div class="status-message error" id="morning-status-error">Attendance Not Marked</div>
                 <button onclick="locateAndMarkAttendance('morning-status-success', 'morning-status-error', 'morning')" class="button1" id="btn1">
                     Mark Morning Attendance
@@ -208,7 +208,7 @@
         <div class="attendance-box">
             <div class="box">
                 <h3>Afternoon Attendance</h3>
-                <div class="status-message success" id="afternoon-status-success"></div>
+                <div class="status-message success" id="afternoon-status-success">Attendance Marked!</div>
                 <div class="status-message error" id="afternoon-status-error">Attendance Not Marked</div>
                 <button  onclick="locateAndMarkAttendance('afternoon-status-success', 'afternoon-status-error', 'afternoon')" class="button2">
                     Mark Afternoon Attendance
@@ -273,11 +273,6 @@
                 errorMessage.style.display = "block";
                 errorMessage.style.opacity = 1; // Trigger fade-in animation
                 errorMessage.style.transform = "translateY(0)";
-                // Hide the error message after 3 seconds
-        setTimeout(() => {
-            errorMessage.style.display = "none";
-        }, 3000); // 3 seconds delay
-                
                 return;
             }
 
@@ -408,19 +403,20 @@
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
 
-   // Hide Morning Attendance button after 11:50 AM and before 10:00 PM
+    // Hide Morning Attendance button after 11:30 AM
     const morningButton = document.querySelector('#btn1');
-    if ((hours > 11 || (hours === 11 && minutes >= 50)) && hours < 22) {
+    if (hours > 12 || hours < 11){
         morningButton.style.display = 'none';
     } else {
         morningButton.style.display = 'block';
     }
 
-    // Hide Afternoon Attendance button from 3:00 PM to 12:00 AM
+    // Hide Afternoon Attendance button after 4:30 PM
     const afternoonButton = document.querySelector('.button2');
-    if (hours >= 15 && hours < 24) {
+    if (hours > 16 || (hours === 16 && minutes > 30) || hours < 14) {
         afternoonButton.style.display = 'none';
-    } else {
+    } 
+    else{
         afternoonButton.style.display = 'inline-block';
     }
 }
