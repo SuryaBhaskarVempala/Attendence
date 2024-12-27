@@ -125,6 +125,56 @@
             left: 10px;
             width: 100px;  /* Adjust the width as needed */
         }
+
+        /* Loading Spinner and Progress */
+        .loading-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        .loading-text {
+            margin-left: 20px;
+            font-size: 18px;
+            color: #3498db;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #ddd;
+            margin-top: 20px;
+            border-radius: 5px;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -157,20 +207,50 @@
             </div>
         </div>
     </div>
+
+    <!-- Loading Spinner and Progress -->
+    <div class="loading-container" id="loading-container">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Loading...</div>
+    </div>
     
     <script>
         let form = document.querySelector("form");
-        let userId=document.querySelector(".username");
-        let password=document.querySelector(".password");
+        let userId = document.querySelector(".username");
+        let password = document.querySelector(".password");
+        let loadingContainer = document.getElementById("loading-container");
+        let loadingText = document.getElementById("loading-text");
 
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
-            jsonObject={
-                "username":`${userId.value.trim()}`,
-                "password":`${password.value.trim()}`
-            }
-            stringObj = JSON.stringify(jsonObject); 
+            
+            // Show loading spinner and progress
+            loadingContainer.style.display = 'flex';
+            let progressBar = document.createElement('div');
+            progressBar.classList.add('progress-bar');
+            let progressBarContainer = document.createElement('div');
+            progressBarContainer.classList.add('progress-bar-container');
+            progressBarContainer.appendChild(progressBar);
+            loadingContainer.appendChild(progressBarContainer);
+
+            let progress = 0;
+            let interval = setInterval(function() {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                loadingText.textContent = 'Loading ' + progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 300); // Update every 300ms
+
+            let jsonObject = {
+                "username": `${userId.value.trim()}`,
+                "password": `${password.value.trim()}`
+            };
+            let stringObj = JSON.stringify(jsonObject); 
             console.log(stringObj);
+
             fetch('https://attendence-deployment.onrender.com/login', {
                 method: 'POST',
                 headers: {
@@ -182,18 +262,20 @@
             .then(data => {
                 console.log(data.msg);
                 if (data.msg == 'sucess') {
-                    sessionStorage.setItem("id",userId.value.trim());
-                    window.location.href="mark.html";
+                    sessionStorage.setItem("id", userId.value.trim());
+                    window.location.href = "mark.html";
                 } 
-                if(data.msg == 'error'){
+                if (data.msg == 'error') {
                     alert('InCorrect Credentials');
-                    window.location.href="index.html";
+                    window.location.href = "index.html";
                 }
+                loadingContainer.style.display = 'none'; // Hide the loading spinner after login
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('There was an error processing your request.Please Try Again !');
-                window.location.href="index.html";
+                alert('There was an error processing your request. Please Try Again!');
+                window.location.href = "index.html";
+                loadingContainer.style.display = 'none'; // Hide the loading spinner if there's an error
             });
         });
     </script>
