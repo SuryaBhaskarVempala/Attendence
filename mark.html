@@ -227,12 +227,12 @@
 
     <div class="additional-buttons">
         <button onclick="window.location.href='mailto:contact@mssquare.com';">Contact Us</button>
-        <button onclick="window.location.href='index.html';">Sign Out</button>
+        <button onclick="window.location.href='login.html';">Sign Out</button>
     </div>
 
     <script>
         if(sessionStorage.length == 0){
-            window.location.href="index.html";
+            window.location.href="login.html";
         }
         
         var forFirstButton="error";
@@ -349,7 +349,7 @@
                         forFirstButton="sucess";
                         alert("Attendece Marked")
                         setTimeout(() => {
-                            window.location.href = 'index.html';
+                            window.location.href = 'login.html';
                         }, 2000);  // Redirect after 2 seconds
                     } 
                     if(data.msg == 'error'){
