@@ -259,8 +259,8 @@ if (!sessionStorage.getItem('visited')) {
             loadingContainer.style.display = 'flex';
 
             jsonObject = {
-                "username": ${userId.value.trim()},
-                "password": ${password.value.trim()}
+                "username": `${userId.value.trim()}`,
+                "password": `${password.value.trim()}`
             };
             stringObj = JSON.stringify(jsonObject); 
             console.log(stringObj);
