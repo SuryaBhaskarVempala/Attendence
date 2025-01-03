@@ -223,6 +223,19 @@
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
 
+
+            if (performance.navigation.type === 1) { // 1 means page refresh
+    window.location.replace("ani.html");
+}
+
+
+ // Redirect to ani.html before the page content loads
+ if (!sessionStorage.getItem('visited')) {
+        sessionStorage.setItem('visited', 'true');
+        window.location.replace("ani.html");
+    }
+
+
             // Add progress bar
             const loadingContainer = document.getElementById('loading-container');
             const loadingText = document.getElementById('loading-text');
