@@ -216,15 +216,8 @@
     </div>
     
     <script>
-        let form = document.querySelector("form");
-        let userId = document.querySelector(".username");
-        let password = document.querySelector(".password");
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
-
-
-            if (performance.navigation.type === 1) { // 1 means page refresh
+         if (performance.navigation.type === 1) { // 1 means page refresh
     window.location.replace("ani.html");
 }
 
@@ -234,6 +227,12 @@
         sessionStorage.setItem('visited', 'true');
         window.location.replace("ani.html");
     }
+        let form = document.querySelector("form");
+        let userId = document.querySelector(".username");
+        let password = document.querySelector(".password");
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
 
 
             // Add progress bar
