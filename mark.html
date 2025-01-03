@@ -395,6 +395,11 @@
                 successMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
             }, 2000);
+            // Add this to redirect after 1 minute
+setTimeout(() => {
+    window.location.href = 'index.html';
+}, 60000);  // Redirect after 60 seconds (1 minute)
+
         }
     
         setInterval(hideAttendanceButtons, 2000); // Keep your existing interval for the buttons' visibility
