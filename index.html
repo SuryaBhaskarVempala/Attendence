@@ -30,6 +30,15 @@
     pointer-events: none; /* Ensures the video does not interfere with clicks */
 }
 
+        @keyframes slideIn {
+    0% {
+        top: -100%; /* Start the video off-screen above */
+    }
+    100% {
+        top: 0; /* End with the video in its final position */
+    }
+}
+
 
         .login-container {
             display: flex;
