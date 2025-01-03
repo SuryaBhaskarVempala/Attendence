@@ -396,12 +396,7 @@ function markAttendance(latitude, longitude, successId, errorId, timeOfDay,event
                 errorMessage.style.display = 'none';
             }, 2000);
         }
-        // Redirect after 1 minute when the page is fully loaded
-    window.onload = function() {
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 60000);  // 60000 ms = 1 minute
-    };
+        
     
         setInterval(hideAttendanceButtons, 2000); // Keep your existing interval for the buttons' visibility
 
