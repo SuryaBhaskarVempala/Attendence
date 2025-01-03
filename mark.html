@@ -333,82 +333,85 @@
                 spinner.style.display = 'none';
             }
         }
-    
-        function markAttendance(latitude, longitude, successId, errorId, timeOfDay,event) {
-            const successMessage = document.getElementById(successId);
-            const errorMessage = document.getElementById(errorId);
 
-            const now = new Date();
-            const currentDate = now.toISOString().split('T')[0];
+        function markAttendance(latitude, longitude, successId, errorId, timeOfDay, event) {
+    const successMessage = document.getElementById(successId);
+    const errorMessage = document.getElementById(errorId);
 
-            // Check if the user's location is within the allowed boundaries
-            if (
-                latitude >= minLatitude && latitude <= maxLatitude &&
-                longitude >= minLongitude && longitude <= maxLongitude
-            ) {
-                successMessage.style.display = "block";
-                successMessage.style.opacity = 1; // Trigger fade-in animation
-                successMessage.style.transform = "translateY(0)";
-                errorMessage.style.display = "none";
+    const now = new Date();
+    const currentDate = now.toISOString().split('T')[0];
 
-                
-                const id=sessionStorage.getItem('id').toString();
+    // Check if the user's location is within the allowed boundaries
+    if (
+        latitude >= minLatitude && latitude <= maxLatitude &&
+        longitude >= minLongitude && longitude <= maxLongitude
+    ) {
+        successMessage.style.display = "block";
+        successMessage.style.opacity = 1; // Trigger fade-in animation
+        successMessage.style.transform = "translateY(0)";
+        errorMessage.style.display = "none";
 
-                fetch('https://attendence-deployment.onrender.com/saveExcel', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                       eid:id
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.msg == 'sucess') {
-                        forFirstButton="sucess";
-                        alert("Attendece Marked")
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 2000);  // Redirect after 2 seconds
-                    } 
-                    if(data.msg == 'error'){
-                        alert('Attendence Not Marked Please Go To Office');
-                        forFirstButton="error";
-                    }
-                })
-                .catch((error) => {
-                    alert("Error: Unable to submit data. Please try again later.");
-                    forFirstButton="error";
-                });
+        const id = sessionStorage.getItem('id').toString();
 
-            } else {
-                errorMessage.style.display = "block";
-                errorMessage.style.opacity = 1; // Trigger fade-in animation
-                errorMessage.style.transform = "translateY(0)";
-                successMessage.style.display = "none";
+        fetch('https://attendence-deployment.onrender.com/saveExcel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                eid: id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.msg == 'sucess') {
+                forFirstButton = "sucess";
+                alert("Attendance Marked")
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);  // Redirect after 2 seconds
+            } 
+            if (data.msg == 'error') {
+                alert('Attendance Not Marked. Please Go To Office');
+                forFirstButton = "error";
             }
+        })
+        .catch((error) => {
+            alert("Error: Unable to submit data. Please try again later.");
+            forFirstButton = "error";
+        });
 
-            const spinner = document.getElementById(timeOfDay + '-spinner');
-            spinner.style.display = 'none';
+    } else {
+        errorMessage.style.display = "block";
+        errorMessage.style.opacity = 1; // Trigger fade-in animation
+        errorMessage.style.transform = "translateY(0)";
+        successMessage.style.display = "none";
+    }
 
-            // Hide success/error message after 2 seconds
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
-            }, 2000);
-        }
-        // Redirect after 1 minute when the page is fully loaded
-    window.onload = function() {
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 60000);  // 60000 ms = 1 minute
-    };
-    
-        setInterval(hideAttendanceButtons, 2000); // Keep your existing interval for the buttons' visibility
+    const spinner = document.getElementById(timeOfDay + '-spinner');
+    spinner.style.display = 'none';
 
-        function hideAttendanceButtons() {
-            let date = new Date();
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
+    // Hide success/error message after 2 seconds
+    setTimeout(() => {
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+    }, 2000);
+}
+
+// Redirect after 1 minute when the page is fully loaded
+window.onload = function() {
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 60000);  // 60000 ms = 1 minute
+};
+
+setInterval(hideAttendanceButtons, 2000); // Keep your existing interval for the buttons' visibility
+
+function hideAttendanceButtons() {
+    let date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+}
+
+        
 
             // Hide Morning Attendance button after 11:15 AM
             const morningButton = document.querySelector('#btn1');
