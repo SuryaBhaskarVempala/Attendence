@@ -348,6 +348,9 @@
                     if (data.msg == 'sucess') {
                         forFirstButton="sucess";
                         alert("Attendece Marked")
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 2000);  // Redirect after 2 seconds
                     } 
                     if(data.msg == 'error'){
                         alert('Attendence Not Marked Please Go To Office');
@@ -368,6 +371,12 @@
 
             const spinner = document.getElementById(timeOfDay + '-spinner');
             spinner.style.display = 'none';
+
+            // Hide success/error message after 2 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+            }, 2000);
         }
     
         setInterval(hideAttendanceButtons, 2000); // Keep your existing interval for the buttons' visibility
