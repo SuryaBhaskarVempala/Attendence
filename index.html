@@ -217,9 +217,10 @@
     
     <script>
 
-if (performance.navigation.type === 1) { // 1 means page refresh
+if (window.performance.navigation.type === 1) { // 1 means page refresh
     window.location.replace("ani.html");
 }
+
 if (!sessionStorage.getItem('visited')) {
     sessionStorage.setItem('visited', 'true');
     window.location.replace("ani.html");
