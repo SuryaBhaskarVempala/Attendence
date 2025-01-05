@@ -17,6 +17,7 @@
             height: 100vh;
             background: linear-gradient(to bottom right, #2f2d2d, #232121);
             position: relative;
+            overflow: hidden; /* Prevent scrollbars during animation */
         }
         video.bg-video {
     position: absolute;
@@ -28,6 +29,17 @@
     z-index: -1; /* Ensures the video stays behind other content */
     pointer-events: none; /* Ensures the video does not interfere with clicks */
 }
+        @keyframes slideInDown {
+    0% {
+        transform: translateY(-100%); /* Starts from above the screen */
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0); /* Moves to its normal position */
+        opacity: 1;
+    }
+}
+
 
 
         .login-container {
@@ -45,6 +57,7 @@
             width: 100%;
             max-width: 350px;
             text-align: center;
+            animation: slideInDown 0.6s ease-out; /* Apply the slide-in-from-top animation */
         }
 
         .logo {
