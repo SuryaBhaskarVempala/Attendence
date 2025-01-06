@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="img/logo5.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -20,17 +20,69 @@
             overflow: hidden;
         }
 
-        video.bg-video {
+        /* Book Loading Animation */
+        .loading-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
         }
 
+        /* Small book icon */
+        .book-icon {
+            position: relative;
+            width: 100px;
+            height: 140px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #f4e1d2; /* Light book cover color */
+            overflow: hidden;
+        }
+
+        /* Page styles */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-left: 1px solid #ccc;
+            transform-origin: left;
+            z-index: 1;
+            animation: page-turn 2s infinite ease-in-out;
+        }
+
+        /* Second page turns later */
+        .page2 {
+            animation-delay: 1s; /* Start the second page turn later */
+        }
+
+        /* Page turning animation */
+        @keyframes page-turn {
+            0% {
+                transform: rotateY(0deg);
+            }
+            50% {
+                transform: rotateY(180deg); /* Page turns halfway */
+            }
+            100% {
+                transform: rotateY(0deg); /* Page returns to normal */
+            }
+        }
+
+        /* Loading text styles */
+        .loading-text {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #007bff;
+        }
+
+        /* Other styling for login page */
         .login-container {
             display: flex;
             justify-content: center;
@@ -39,7 +91,6 @@
             flex-direction: column;
         }
 
-        /* Rainbow Text Heading */
         .attendance-heading {
             font-size: 40px;
             font-weight: bold;
@@ -137,97 +188,12 @@
             left: 10px;
             width: 100px;
         }
-
-        /* New Book with Turning Pages Animation */
-        .loading-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .book {
-            position: relative;
-            width: 200px;
-            height: 300px;
-            perspective: 1000px;
-        }
-
-        .book-cover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #deb887; /* Light brown color for book cover */
-            border-radius: 10px;
-        }
-
-        .pages-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 180px;
-            height: 280px;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-
-        .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            border: 1px solid #ddd;
-            transform-origin: left center;
-            animation: page-turn 2s ease-in-out infinite;
-        }
-
-        .page1 {
-            background-color: #ffcccb;
-            animation-delay: 0s;
-        }
-
-        .page2 {
-            background-color: #d3e2ff;
-            animation-delay: 1s;
-            transform-origin: right center;
-        }
-
-        @keyframes page-turn {
-            0% {
-                transform: rotateY(0deg);
-            }
-            50% {
-                transform: rotateY(-180deg);
-            }
-            100% {
-                transform: rotateY(0deg);
-            }
-        }
-
-        .loading-text {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #3498db;
-        }
     </style>
 </head>
 
 <body>
-   <video class="bg-video" autoplay loop muted playsinline>
-    <source src="img/bg1.mp4" type="video/mp4">
-    Install New Version
-   </video>
-
     <div class="login-container">
+        <!-- Attendance Portal Heading -->
         <div class="attendance-heading">Attendance Portal</div>
 
         <div class="login-box">
@@ -235,7 +201,7 @@
                 <img src="img/mslogo__1_-removebg-preview.png" alt="Logo">
                 Ms Square Technologies
             </div>
-
+            <!-- Login Form -->
             <div id="login-form" class="form-container active">
                 <h2>LOGIN</h2>
                 <form action="#" method="POST">
@@ -254,14 +220,11 @@
         </div>
     </div>
 
-    <!-- New Book Loading Animation -->
+    <!-- Loading Spinner and Progress -->
     <div class="loading-container" id="loading-container">
-        <div class="book">
-            <div class="book-cover"></div>
-            <div class="pages-container">
-                <div class="page page1"></div>
-                <div class="page page2"></div>
-            </div>
+        <div class="book-icon">
+            <div class="page page1"></div>
+            <div class="page page2"></div>
         </div>
         <div class="loading-text" id="loading-text">Loading...</div>
     </div>
@@ -272,18 +235,18 @@
         let password = document.querySelector(".password");
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); 
 
             // Show loading container
             const loadingContainer = document.getElementById('loading-container');
             loadingContainer.style.display = 'flex';
 
+            // Form submission logic (AJAX request)
             jsonObject = {
                 "username": `${userId.value.trim()}`,
                 "password": `${password.value.trim()}`
             };
-            stringObj = JSON.stringify(jsonObject);
-            console.log(stringObj);
+            stringObj = JSON.stringify(jsonObject); 
 
             fetch('https://attendence-deployment.onrender.com/login', {
                 method: 'POST',
@@ -294,8 +257,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data.msg);
-                loadingContainer.style.display = 'none';
+                loadingContainer.style.display = 'none';  // Hide loading animation
                 if (data.msg == 'sucess') {
                     sessionStorage.setItem("id", userId.value.trim());
                     window.location.href = "mark.html";
