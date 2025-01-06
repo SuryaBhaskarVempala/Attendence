@@ -17,37 +17,26 @@
             height: 100vh;
             background: linear-gradient(to bottom right, #2f2d2d, #232121);
             position: relative;
-            overflow: hidden; /* Prevent scrollbars during animation */
+            overflow: hidden;
         }
 
         video.bg-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1; /* Ensures the video stays behind other content */
-    pointer-events: none; /* Ensures the video does not interfere with clicks */
-}
-        @keyframes slideInDown {
-    0% {
-        transform: translateY(-100%); /* Starts from above the screen */
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0); /* Moves to its normal position */
-        opacity: 1;
-    }
-}
-
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            pointer-events: none;
+        }
 
         .login-container {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100%;
-            flex-direction: column; /* Added for positioning */
+            flex-direction: column;
         }
 
         /* Rainbow Text Heading */
@@ -61,14 +50,13 @@
         }
 
         .login-box {
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            background: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 350px;
             text-align: center;
-            animation: slideInDown 0.6s ease-out; /* Apply the slide-in-from-top animation */
         }
 
         .logo {
@@ -78,13 +66,13 @@
             font-weight: bold;
             color: #222223;
             margin-bottom: 20px;
-            font-family: 'Roboto', sans-serif; /* New font applied */
+            font-family: 'Roboto', sans-serif;
         }
 
         .logo img {
-            width: 100px; /* Adjust the size of the logo */
-            height: 125px; /* Ensure the logo maintains its aspect ratio */
-            margin-right: -30px; /* Add space between logo and text */
+            width: 100px;
+            height: 125px;
+            margin-right: -30px;
         }
 
         h2 {
@@ -143,84 +131,111 @@
             display: block;
         }
 
-        /* Left-top logo positioning */
         .top-left-logo {
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 100px;  /* Adjust the width as needed */
+            width: 100px;
         }
 
-        /* Loading Spinner and Progress */
+        /* New Book with Turning Pages Animation */
         .loading-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             display: none;
+            flex-direction: column;
+            text-align: center;
         }
 
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
+        .book {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            perspective: 1000px;
+        }
+
+        .book-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #deb887; /* Light brown color for book cover */
+            border-radius: 10px;
+        }
+
+        .pages-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 180px;
+            height: 280px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border: 1px solid #ddd;
+            transform-origin: left center;
+            animation: page-turn 2s ease-in-out infinite;
+        }
+
+        .page1 {
+            background-color: #ffcccb;
+            animation-delay: 0s;
+        }
+
+        .page2 {
+            background-color: #d3e2ff;
+            animation-delay: 1s;
+            transform-origin: right center;
+        }
+
+        @keyframes page-turn {
+            0% {
+                transform: rotateY(0deg);
+            }
+            50% {
+                transform: rotateY(-180deg);
+            }
+            100% {
+                transform: rotateY(0deg);
+            }
         }
 
         .loading-text {
-            margin-left: 20px;
+            margin-top: 10px;
             font-size: 18px;
             color: #3498db;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            background: #ddd;
-            margin-top: 20px;
-            border-radius: 5px;
-            height: 10px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #007BFF;
-            border-radius: 5px;
         }
     </style>
 </head>
 
 <body>
-    
    <video class="bg-video" autoplay loop muted playsinline>
     <source src="img/bg1.mp4" type="video/mp4">
     Install New Version
-</video>
+   </video>
 
-    
     <div class="login-container">
-        <!-- Attendance Portal Heading -->
         <div class="attendance-heading">Attendance Portal</div>
 
         <div class="login-box">
             <div class="logo">
-                <img src="img/mslogo__1_-removebg-preview.png" alt="Logo"> <!-- Small Logo Image -->
+                <img src="img/mslogo__1_-removebg-preview.png" alt="Logo">
                 Ms Square Technologies
             </div>
-            <!-- Login Form -->
+
             <div id="login-form" class="form-container active">
                 <h2>LOGIN</h2>
                 <form action="#" method="POST">
@@ -238,63 +253,38 @@
             </div>
         </div>
     </div>
-    
-    <!-- Loading Spinner and Progress -->
+
+    <!-- New Book Loading Animation -->
     <div class="loading-container" id="loading-container">
-        <div class="spinner"></div>
+        <div class="book">
+            <div class="book-cover"></div>
+            <div class="pages-container">
+                <div class="page page1"></div>
+                <div class="page page2"></div>
+            </div>
+        </div>
         <div class="loading-text" id="loading-text">Loading...</div>
     </div>
-    
+
     <script>
-
-if (performance.navigation.type === 1) { // 1 means page refresh
-    window.location.replace("ani.html");
-}
-if (!sessionStorage.getItem('visited')) {
-    sessionStorage.setItem('visited', 'true');
-    window.location.replace("ani.html");
-}
-
-
-        
         let form = document.querySelector("form");
         let userId = document.querySelector(".username");
         let password = document.querySelector(".password");
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
-
-
-            // Add progress bar
-            const loadingContainer = document.getElementById('loading-container');
-            const loadingText = document.getElementById('loading-text');
-            let progressBar = document.createElement('div');
-            progressBar.classList.add('progress-bar');
-            let progressBarContainer = document.createElement('div');
-            progressBarContainer.classList.add('progress-bar-container');
-            progressBarContainer.appendChild(progressBar);
-            loadingContainer.appendChild(progressBarContainer);
-
-            let progress = 0;
-            let interval = setInterval(function() {
-                progress += 10;
-                progressBar.style.width = progress + '%';
-                loadingText.textContent = 'Loading ' + progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                }
-            }, 100);
+            event.preventDefault();
 
             // Show loading container
+            const loadingContainer = document.getElementById('loading-container');
             loadingContainer.style.display = 'flex';
 
             jsonObject = {
                 "username": `${userId.value.trim()}`,
                 "password": `${password.value.trim()}`
             };
-            stringObj = JSON.stringify(jsonObject); 
+            stringObj = JSON.stringify(jsonObject);
             console.log(stringObj);
-            
+
             fetch('https://attendence-deployment.onrender.com/login', {
                 method: 'POST',
                 headers: {
