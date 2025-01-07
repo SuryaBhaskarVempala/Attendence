@@ -158,7 +158,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 9999;
@@ -168,21 +168,6 @@
         .loading-icon {
             width: 50px; /* Small size for the icon */
             height: 50px;
-        }
-
-        /* Loading Spinner and Progress */
-        .loading-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            display: none;
         }
 
     </style>
@@ -205,7 +190,7 @@
 
             <div id="login-form" class="form-container active">
                 <h2>LOGIN</h2>
-                <form action="#" method="POST">
+                <form id="loginForm">
                     <div class="input-container">
                         <input type="text" placeholder="Company-ID" name="username" class="username" required>
                     </div>
@@ -223,18 +208,18 @@
 
     <!-- New Loading Animation -->
     <div class="overlay" id="loading-overlay">
-        <img src="img/mslogo__1_-removebg-preview.png" alt="Loading Icon" class="loading-icon">
+        <img src="ok.png" alt="Loading Icon" class="loading-icon">
     </div>
 
     <script>
-        let form = document.querySelector("form");
+        let form = document.getElementById('loginForm');
         let userId = document.querySelector(".username");
         let password = document.querySelector(".password");
 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Show the new loading animation overlay
+            // Show the loading animation overlay
             const loadingOverlay = document.getElementById('loading-overlay');
             loadingOverlay.style.display = 'flex';
 
