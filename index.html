@@ -247,13 +247,13 @@
     
     <script>
 
-if (performance.navigation.type === 1) { // 1 means page refresh
-    window.location.replace("ani.html");
-}
 if (!sessionStorage.getItem('visited')) {
     sessionStorage.setItem('visited', 'true');
-    window.location.replace("ani.html");
+    window.location.href = "ani.html"; 
+} else if (performance.getEntriesByType("navigation")[0].type === "reload") {
+    window.location.href = "ani.html";
 }
+
 
 
         
