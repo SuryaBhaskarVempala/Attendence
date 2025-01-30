@@ -245,83 +245,75 @@
         <div class="loading-text" id="loading-text">Loading...</div>
     </div>
     
-    <script>
+   <script>
+    // Redirect to ani.html before loading this page if it's the first visit in this session
+    if (!sessionStorage.getItem('visited_ani')) {
+        sessionStorage.setItem('visited_ani', 'true');
+        window.location.href = "ani.html"; 
+    }
 
-if (!sessionStorage.getItem('visited')) {
-    sessionStorage.setItem('visited', 'true');
-    window.location.href = "ani.html"; 
-} else if (performance.getEntriesByType("navigation")[0].type === "reload") {
-    window.location.href = "ani.html";
-}
+    let form = document.querySelector("form");
+    let userId = document.querySelector(".username");
+    let password = document.querySelector(".password");
 
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
 
+        // Show loading container
+        const loadingContainer = document.getElementById('loading-container');
+        const loadingText = document.getElementById('loading-text');
+        loadingContainer.style.display = 'flex';
 
-        
-        let form = document.querySelector("form");
-        let userId = document.querySelector(".username");
-        let password = document.querySelector(".password");
+        // Add progress bar
+        let progressBar = document.createElement('div');
+        progressBar.classList.add('progress-bar');
+        let progressBarContainer = document.createElement('div');
+        progressBarContainer.classList.add('progress-bar-container');
+        progressBarContainer.appendChild(progressBar);
+        loadingContainer.appendChild(progressBarContainer);
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+        let progress = 0;
+        let interval = setInterval(function() {
+            progress += 10;
+            progressBar.style.width = progress + '%';
+            loadingText.textContent = 'Loading ' + progress + '%';
+            if (progress >= 100) {
+                clearInterval(interval);
+            }
+        }, 100);
 
+        // Create JSON object for request
+        let jsonObject = {
+            "username": userId.value.trim(),
+            "password": password.value.trim()
+        };
 
-            // Add progress bar
-            const loadingContainer = document.getElementById('loading-container');
-            const loadingText = document.getElementById('loading-text');
-            let progressBar = document.createElement('div');
-            progressBar.classList.add('progress-bar');
-            let progressBarContainer = document.createElement('div');
-            progressBarContainer.classList.add('progress-bar-container');
-            progressBarContainer.appendChild(progressBar);
-            loadingContainer.appendChild(progressBarContainer);
-
-            let progress = 0;
-            let interval = setInterval(function() {
-                progress += 10;
-                progressBar.style.width = progress + '%';
-                loadingText.textContent = 'Loading ' + progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                }
-            }, 100);
-
-            // Show loading container
-            loadingContainer.style.display = 'flex';
-
-            jsonObject = {
-                "username": ${userId.value.trim()},
-                "password": ${password.value.trim()}
-            };
-            stringObj = JSON.stringify(jsonObject); 
-            console.log(stringObj);
-            
-            fetch('https://attendence-deployment.onrender.com/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: stringObj
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.msg);
-                loadingContainer.style.display = 'none';
-                if (data.msg == 'sucess') {
-                    sessionStorage.setItem("id", userId.value.trim());
-                    window.location.href = "mark.html";
-                } 
-                if (data.msg == 'error') {
-                    alert('InCorrect Credentials');
-                    window.location.href = "index.html";
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error processing your request. Please Try Again!');
-                loadingContainer.style.display = 'none';
+        fetch('https://attendence-deployment.onrender.com/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObject)
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingContainer.style.display = 'none';
+            if (data.msg === 'sucess') {
+                sessionStorage.setItem("id", userId.value.trim());
+                window.location.href = "mark.html";
+            } else {
+                alert('Incorrect Credentials');
                 window.location.href = "index.html";
-            });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error processing your request. Please try again.');
+            loadingContainer.style.display = 'none';
+            window.location.href = "index.html";
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
